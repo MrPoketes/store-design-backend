@@ -6,11 +6,11 @@ async function getAll() {
 async function getOne(id) {
     return Product.findById(id);
 }
-async function getSpecificGender(gender){
-    return Product.find({type:gender}).exec();
+async function getSpecificGender(gender) {
+    return Product.find({ type: gender }).exec();
 }
-async function getNew(value){
-    return Product.find({new:value}).exec();
+async function getNew(value) {
+    return Product.find({ new: value }).exec();
 }
 async function update(id, data) {
     const item = await getAll(id);

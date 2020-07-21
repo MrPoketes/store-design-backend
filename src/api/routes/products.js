@@ -43,13 +43,12 @@ router.get("/:id?", async (req, res) => {
 router.get("/getNew/:value",async(req,res)=>{
     try{
         const items = await productServices.getNew(req.params.value);
-        return res.send(items);
-        // if(items){
-        //     return res.send(items);
-        // }
-        // else{
-        //     return res.sendStatus(404);
-        // }
+        if(items){
+            return res.send(items);
+        }
+        else{
+            return res.sendStatus(404);
+        }
     }
     catch(err){
         res.status(500).send(err);
@@ -60,6 +59,31 @@ router.get("/get/:gender",async(req,res)=>{
         const items = await productServices.getSpecificGender(req.params.gender);
         if(items){
             return res.send(items);
+        }
+        else{
+            return res.sendStatus(404);
+        }
+    }
+    catch(err){
+        return res.status(500).send(err);
+    }
+});
+router.get("/categories/:gender",async (req,res)=>{
+    try{
+        const items = await productServices.getSpecificGender(req.params.gender);
+        let categories = [];
+        if(items){
+            Object.keys(items).forEach((key)=>{
+                if(categories.includes(items[key].category)===false){
+                    categories.push(items[key].category);
+                }
+            });
+            if(categories){
+                return res.send(categories);
+            }
+            else{
+                res.sendStatus(404);
+            }
         }
         else{
             return res.sendStatus(404);

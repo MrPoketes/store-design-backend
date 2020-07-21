@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
+const cors = require('cors');
 require('dotenv/config');
 const productRoutes = require('./api/routes/products');
 
@@ -15,7 +16,7 @@ mongoose.connect('mongodb://localhost:37017/shop', { useUnifiedTopology: true, u
 mongoose.Promise = global.Promise;
 
 // App use
-
+app.use(cors());
 app.use(bodyParser.json());
 app.use('/uploads',express.static(path.join(__dirname,'uploads')));
 app.use(bodyParser.urlencoded({ extended: false }));

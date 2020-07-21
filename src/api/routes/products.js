@@ -40,7 +40,35 @@ router.get("/:id?", async (req, res) => {
         return res.status(500).send(err);
     }
 });
-
+router.get("/getNew/:value",async(req,res)=>{
+    try{
+        const items = await productServices.getNew(req.params.value);
+        return res.send(items);
+        // if(items){
+        //     return res.send(items);
+        // }
+        // else{
+        //     return res.sendStatus(404);
+        // }
+    }
+    catch(err){
+        res.status(500).send(err);
+    }
+})
+router.get("/get/:gender",async(req,res)=>{
+    try{
+        const items = await productServices.getSpecificGender(req.params.gender);
+        if(items){
+            return res.send(items);
+        }
+        else{
+            return res.sendStatus(404);
+        }
+    }
+    catch(err){
+        return res.status(500).send(err);
+    }
+})
 // Deleting a product from the database
 
 router.delete("/delete/:id?", async (req, res) => {

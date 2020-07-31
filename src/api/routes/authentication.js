@@ -34,5 +34,23 @@ router.post("/register", (req,res)=>{
         }
     })
 });
-
+router.get("/user/:username", async (req,res)=>{
+    if(req.params.username){
+        const user = await User.find({username:req.params.username}).exec();
+        if(user){
+            if(user.length!==0){
+                res.status(200).send(user);
+            }
+            else{
+                res.send("User not found");
+            }
+        }
+        else{
+            res.sendStatus(404)
+        }
+    }
+    else{
+        res.sendStatus(500);
+    }
+});
 module.exports = router;

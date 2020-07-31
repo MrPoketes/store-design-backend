@@ -8,7 +8,7 @@ require('dotenv/config');
 const productRoutes = require('./api/routes/products');
 const passport = require("passport");
 const authenticationRoutes = require("./api/routes/authentication");
-
+const basketRoutes = require("./api/routes/basket");
 // Connecting to mongoose.
 // TODO : when deploying to a website change the url
 mongoose.connect('mongodb://localhost:37017/shop', { useUnifiedTopology: true, useNewUrlParser: true }).then(() => {
@@ -19,18 +19,20 @@ mongoose.Promise = global.Promise;
 
 // App use
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 // TODO : Change origin when deploying to heroku
 app.use(cors({
     origin:"http://localhost:3000",
     credentials:true,
 }));
-app.use(bodyParser.json());
+
 app.use('/uploads',express.static(path.join(__dirname,'uploads')));
-app.use(bodyParser.urlencoded({ extended: false }));
 
 // Routes
 app.use('/api/products', productRoutes);
-
+app.use('/basket', basketRoutes);
 // Authentication
 app.use(passport.initialize());
 app.use(passport.session());

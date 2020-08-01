@@ -11,7 +11,7 @@ const authenticationRoutes = require("./api/routes/authentication");
 const basketRoutes = require("./api/routes/basket");
 // Connecting to mongoose.
 // TODO : when deploying to a website change the url
-mongoose.connect('mongodb://localhost:37017/shop', { useUnifiedTopology: true, useNewUrlParser: true }).then(() => {
+mongoose.connect('mongodb://localhost:37017/shop', { useFindAndModify:false, useUnifiedTopology: true, useNewUrlParser: true }).then(() => {
     console.log("Successfully connected to MongoDB");
 });
 

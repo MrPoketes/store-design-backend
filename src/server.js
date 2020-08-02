@@ -9,9 +9,10 @@ const productRoutes = require('./api/routes/products');
 const passport = require("passport");
 const authenticationRoutes = require("./api/routes/authentication");
 const basketRoutes = require("./api/routes/basket");
+const config = require('./config');
 // Connecting to mongoose.
 // TODO : when deploying to a website change the url
-mongoose.connect('mongodb://localhost:37017/shop', { useFindAndModify: false, useUnifiedTopology: true, useNewUrlParser: true }).then(() => {
+mongoose.connect(config.url, { useFindAndModify: false, useUnifiedTopology: true, useNewUrlParser: true }).then(() => {
     console.log("Successfully connected to MongoDB");
 });
 

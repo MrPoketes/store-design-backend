@@ -8,29 +8,41 @@ const User = require('../models/user');
 router.post("/", async (req, res) => {
     const body = req.body;
     if (body) {
+        const name = body.name;
         const priceOne = body.price;
         const quantity = body.quantity;
         const itemId = body.itemId;
         const username = body.username;
         let fullPrice = priceOne * quantity;
         if (itemId !== "" && quantity > 0) {
-            let basket = await User.find({ username: username },"basket").exec();
+            let basket = await User.find({ username: username }, "basket").exec();
+            let index = -1;
             if (basket) {
-                let data = {};
-                let newArray = [];
-                data = Object.assign({
-                    priceOne: priceOne,
-                    fullPrice: fullPrice,
-                    itemId: itemId,
-                    quantity: quantity,
-                });
-                basket[0].basket.push(data);
-                console.log(basket);
-                User.findOneAndUpdate({username:username},{basket:basket[0].basket},(err,info)=>{
-                    if(err){
+                for (let i = 0; i !== basket[0].basket.length; i++) {
+                    if (basket[0].basket[i].itemId === itemId) {
+                        index = i;
+                    }
+                }
+                if (index === -1) {
+                    let data = {};
+                    data = Object.assign({
+                        name: name,
+                        priceOne: priceOne,
+                        fullPrice: fullPrice,
+                        itemId: itemId,
+                        quantity: quantity,
+                    });
+                    basket[0].basket.push(data);
+                }
+                else {
+                    basket[0].basket[index].quantity += quantity;
+                    basket[0].basket[index].fullPrice = priceOne * basket[0].basket[index].quantity;
+                }
+                User.findOneAndUpdate({ username: username }, { basket: basket[0].basket }, (err, info) => {
+                    if (err) {
                         res.send(err);
                     }
-                    else{
+                    else {
                         res.send(info);
                     }
                 })
@@ -48,19 +60,23 @@ router.post("/", async (req, res) => {
     }
 });
 
-// Provide a JSON file
 router.get("/getbasket/:username", async (req, res) => {
     if (req.params.username) {
-        const basket = await User.find({ username: req.params.username },"basket");
+        const basket = await User.find({ username: req.params.username }, "basket");
         if (basket) {
             var length = 0;
-            if (basket[0].basket.length>0) {
-                length = basket[0].basket.length;
+            var total = 0;
+            if (basket[0].basket.length > 0) {
+                for (let i = 0; i !== basket[0].basket.length; i++) {
+                    length += basket[0].basket[i].quantity;
+                    total += basket[0].basket[i].fullPrice;
+                }
             }
             let data = {};
             data = Object.assign({
                 basket: basket[0].basket,
-                size: length
+                size: length,
+                total: total,
             });
             res.send(data);
         }
@@ -79,21 +95,31 @@ router.get("/getbasket/:username", async (req, res) => {
 router.post("/updateBasket", async (req, res) => {
     if (req.body.username && req.body.itemId && req.body.quantity) {
         const itemId = req.body.itemId;
-        const user = await User.find({ username: req.body.username });
-        if (user) {
+        let basket = await User.find({ username: req.body.username }, "basket");
+        if (basket) {
             let index = -1;
-            for (let i = 0; i !== user.basket.length; i++) {
-                if (user.basket[i].itemId === itemId) {
+            for (let i = 0; i !== basket[0].basket.length; i++) {
+                if (basket[0].basket[i].itemId === itemId) {
                     index = i;
                     break;
                 }
             }
             if (index !== -1) {
-                user.basket[index].quantity = req.body.quantity;
-                user.basket[index].fullPrice = user.basket[index].priceOne * req.body.quantity;
-                user.save()
-                    .then(result => res.status(200).send(result))
-                    .catch(err => res.send(err));
+                if (req.body.quantity !== 0) {
+                    basket[0].basket[index].quantity = req.body.quantity;
+                    basket[0].basket[index].fullPrice = basket[0].basket[index].priceOne * req.body.quantity;
+                }
+                else {
+                    basket[0].basket[index] = [];
+                }
+                User.findOneAndUpdate({ username: req.body.username }, { basket: basket[0].basket }, (err, info) => {
+                    if (err) {
+                        res.send(err);
+                    }
+                    else {
+                        res.send("Updated Successfully");
+                    }
+                });
             }
             else {
                 res.status(404).send("Item Not Found");
@@ -111,20 +137,25 @@ router.post("/updateBasket", async (req, res) => {
 router.delete("/deleteOne", async (req, res) => {
     if (req.body.itemId && req.body.username) {
         const itemId = req.body.itemId;
-        const user = await User.find({ username: req.body.username });
-        if (user) {
+        let basket = await User.find({ username: req.body.username }, "basket");
+        if (basket) {
             let index = -1;
-            for (let i = 0; i !== user.basket.length; i++) {
-                if (user.basket[i].itemId === itemId) {
+            for (let i = 0; i !== basket[0].basket.length; i++) {
+                if (basket[0].basket[i].itemId === itemId) {
                     index = i;
                     break;
                 }
             }
             if (index !== -1) {
-                user.basket.splice(index, 1);
-                user.save()
-                    .then(result => res.status(200).send(result))
-                    .catch(err => res.send(err));
+                basket[0].basket.splice(index, 1);
+                User.findOneAndUpdate({ username: req.body.username }, { basket: basket[0].basket }, (err, info) => {
+                    if (err) {
+                        res.send(err);
+                    }
+                    else {
+                        res.send("Record deleted successfully");
+                    }
+                })
             }
             else {
                 res.status(404).send("Item not found");
@@ -144,11 +175,14 @@ router.delete("/deleteOne", async (req, res) => {
 
 router.delete("/", async (req, res) => {
     if (req.body.username) {
-        const user = await User.find({ username: req.body.username });
-        user.basket = [];
-        user.save()
-            .then(result => res.status(200).send(result))
-            .catch(err => res.send(err))
+        User.findOneAndUpdate({ username: req.body.username }, { basket: [] }, (err, info) => {
+            if (err) {
+                res.send(err);
+            }
+            else {
+                res.send("Removed Successfully");
+            }
+        });
     }
     else {
         res.send("No userId provided");

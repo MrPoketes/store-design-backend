@@ -40,56 +40,56 @@ router.get("/:id?", async (req, res) => {
         return res.status(500).send(err);
     }
 });
-router.get("/getNew/:value",async(req,res)=>{
-    try{
+router.get("/getNew/:value", async (req, res) => {
+    try {
         const items = await productServices.getNew(req.params.value);
-        if(items){
+        if (items) {
             return res.send(items);
         }
-        else{
+        else {
             return res.sendStatus(404);
         }
     }
-    catch(err){
+    catch (err) {
         res.status(500).send(err);
     }
 })
-router.get("/get/:gender",async(req,res)=>{
-    try{
+router.get("/get/:gender", async (req, res) => {
+    try {
         const items = await productServices.getSpecificGender(req.params.gender);
-        if(items){
+        if (items) {
             return res.send(items);
         }
-        else{
+        else {
             return res.sendStatus(404);
         }
     }
-    catch(err){
+    catch (err) {
         return res.status(500).send(err);
     }
 });
-router.get("/categories/:gender",async (req,res)=>{
-    try{
+router.get("/categories/:gender", async (req, res) => {
+    try {
         const items = await productServices.getSpecificGender(req.params.gender);
         let categories = [];
-        if(items){
-            Object.keys(items).forEach((key)=>{
-                if(categories.includes(items[key].category)===false){
+        if (items) {
+            Object.keys(items).forEach((key) => {
+                if (categories.includes(items[key].category) === false) {
                     categories.push(items[key].category);
                 }
             });
-            if(categories){
+            if (categories) {
                 return res.send(categories);
             }
-            else{
+            else {
                 res.sendStatus(404);
             }
         }
-        else{
+        else {
             return res.sendStatus(404);
         }
     }
-    catch(err){
+    catch (err) {
         return res.status(500).send(err);
     }
 })
@@ -120,7 +120,7 @@ router.delete("/delete/:id?", async (req, res) => {
 
 router.post("/", upload.single('image'), async (req, res) => {
     var newProduct = new Product();
-    if (req.body.type === "men" || req.body.type === "women" || req.body.type === "kids" && req.body.new === "true" || req.body.new === "false" ) {
+    if (req.body.type === "men" || req.body.type === "women" || req.body.type === "kids" && req.body.new === "true" || req.body.new === "false") {
         newProduct.name = req.body.name;
         newProduct.price = req.body.price;
         newProduct.category = req.body.category;

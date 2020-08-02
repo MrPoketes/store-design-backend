@@ -11,7 +11,7 @@ const authenticationRoutes = require("./api/routes/authentication");
 const basketRoutes = require("./api/routes/basket");
 // Connecting to mongoose.
 // TODO : when deploying to a website change the url
-mongoose.connect('mongodb://localhost:37017/shop', { useFindAndModify:false, useUnifiedTopology: true, useNewUrlParser: true }).then(() => {
+mongoose.connect('mongodb://localhost:37017/shop', { useFindAndModify: false, useUnifiedTopology: true, useNewUrlParser: true }).then(() => {
     console.log("Successfully connected to MongoDB");
 });
 
@@ -24,11 +24,11 @@ app.use(bodyParser.json());
 
 // TODO : Change origin when deploying to heroku
 app.use(cors({
-    origin:"http://localhost:3000",
-    credentials:true,
+    origin: "http://localhost:3000",
+    credentials: true,
 }));
 
-app.use('/uploads',express.static(path.join(__dirname,'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.use('/api/products', productRoutes);
@@ -36,7 +36,7 @@ app.use('/basket', basketRoutes);
 // Authentication
 app.use(passport.initialize());
 app.use(passport.session());
-app.use("/auth",authenticationRoutes);
+app.use("/auth", authenticationRoutes);
 
 // Server launch
 app.listen(8081, () => console.log("Listening on port 8081"));

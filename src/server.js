@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 
 // TODO : Change origin when deploying to heroku
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: "https://store-design.herokuapp.com",
     credentials: true,
 }));
 

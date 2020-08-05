@@ -12,6 +12,7 @@ const basketRoutes = require("./api/routes/basket");
 
 // Connecting to mongoose.
 // TODO : when deploying to a website change the url
+
 mongoose.connect(process.env.MONGODB_URI, { useFindAndModify: false, useUnifiedTopology: true, useNewUrlParser: true }).then(() => {
     console.log("Successfully connected to MongoDB");
 });
@@ -40,4 +41,4 @@ app.use(passport.session());
 app.use("/auth", authenticationRoutes);
 
 // Server launch
-app.listen(8081, () => console.log("Listening on port 8081"));
+app.listen(process.env.PORT, () => console.log("Listening on port process.env.PORT"));

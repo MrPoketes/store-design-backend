@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "npx nodemon --exec npx babel-node src/server.js "
+    "start": "npx nodemon --exec npx babel-node src/server.js ",
+    "heroku-postbuild": "npm install npm && run build"
   },
   "repository": {
     "type": "git",

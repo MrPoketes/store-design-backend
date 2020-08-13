@@ -14,17 +14,6 @@ const PORT = process.env.PORT || 8081;
 // Connecting to mongoose.
 // TODO : when deploying to a website change the url
 
-const URI = 'mongodb://localhost:37017/shop';
-mongoose.connect(process.env.MONGODB_URI || URI, { useFindAndModify: false, useUnifiedTopology: true, useNewUrlParser: true }).then(() => {
-    console.log("Successfully connected to MongoDB");
-});
-
-mongoose.Promise = global.Promise;
-
-// App use
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', 'http://store-design.herokuapp.com');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
@@ -39,6 +28,19 @@ var allowCrossDomain = function(req, res, next) {
     }
 };
 app.use(allowCrossDomain);
+
+const URI = 'mongodb://localhost:37017/shop';
+mongoose.connect(process.env.MONGODB_URI || URI, { useFindAndModify: false, useUnifiedTopology: true, useNewUrlParser: true }).then(() => {
+    console.log("Successfully connected to MongoDB");
+});
+
+mongoose.Promise = global.Promise;
+
+// App use
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+
 // app.use(cors({
 //     origin: "http://store-design.herokuapp.com",
 //     methods: "GET, HEAD, PUT, PATCH, POST, DELETE",

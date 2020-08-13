@@ -41,12 +41,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
-// app.use(cors({
-//     origin: "http://store-design.herokuapp.com",
-//     methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
-//     allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json',
-//     credentials: true,
-// }));
+app.use(cors({
+    origin: "https://store-design.herokuapp.com",
+    methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
+    allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json',
+    credentials: true,
+}));
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

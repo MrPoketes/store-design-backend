@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(cors({
-    origin: "http://store-design.herokuapp.com, http://localhost:3000",
+    origin: "http://store-design.herokuapp.com",
     methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
     allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json',
     credentials: true,

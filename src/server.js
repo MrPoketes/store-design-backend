@@ -15,6 +15,7 @@ const PORT = process.env.PORT || 8081;
 // TODO : when deploying to a website change the url
 
 const URI = 'mongodb://localhost:37017/shop';
+console.log(process.env.MONGODB_URI);
 mongoose.connect(process.env.MONGODB_URI || URI, { useFindAndModify: false, useUnifiedTopology: true, useNewUrlParser: true}).then(() => {
     console.log("Successfully connected to MongoDB");
 })

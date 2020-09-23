@@ -14,25 +14,11 @@ const PORT = process.env.PORT || 8081;
 // Connecting to mongoose.
 // TODO : when deploying to a website change the url
 
-var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://store-design.herokuapp.com');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-
-    // intercept OPTIONS method
-    if ('OPTIONS' == req.method) {
-      res.send(200);
-    }
-    else {
-      next();
-    }
-};
-app.use(allowCrossDomain);
-
 const URI = 'mongodb://localhost:37017/shop';
-mongoose.connect(process.env.MONGODB_URI || URI, { useFindAndModify: false, useUnifiedTopology: true, useNewUrlParser: true }).then(() => {
+mongoose.connect(process.env.MONGODB_URI || URI, { useFindAndModify: false, useUnifiedTopology: true, useNewUrlParser: true}).then(() => {
     console.log("Successfully connected to MongoDB");
-});
+})
+.catch(err=> console.log(err.reason));
 
 mongoose.Promise = global.Promise;
 
@@ -42,7 +28,7 @@ app.use(bodyParser.json());
 
 
 app.use(cors({
-    origin: "https://store-design.herokuapp.com",
+    origin: "http://store-design.herokuapp.com",
     methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
     allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json',
     credentials: true,

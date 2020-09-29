@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 
 
 app.use(cors({
-    origin: "*",
+    origin: "https://store-design.netlify.app",
     methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
     allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json',
     credentials: true,

@@ -5,10 +5,10 @@ const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
 require('dotenv/config');
-const productRoutes = require('./src/api/routes/products');
+const productRoutes = require('./api/routes/products');
 const passport = require("passport");
-const authenticationRoutes = require("./src/api/routes/authentication");
-const basketRoutes = require("./src/api/routes/basket");
+const authenticationRoutes = require("./api/routes/authentication");
+const basketRoutes = require("./api/routes/basket");
 const PORT = process.env.PORT || 8081;
 
 // Connecting to mongoose.
@@ -33,7 +33,7 @@ app.use(cors({
     credentials: true,
 }));
 
-app.use('/uploads', express.static(path.join(__dirname, 'src/uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.use('/api/products', productRoutes);

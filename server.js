@@ -33,7 +33,7 @@ app.use(cors({
     credentials: true,
 }));
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'src/uploads')));
 
 // Routes
 app.use('/api/products', productRoutes);

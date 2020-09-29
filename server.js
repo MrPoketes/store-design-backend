@@ -5,18 +5,16 @@ const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
 require('dotenv/config');
-const productRoutes = require('./api/routes/products');
+const productRoutes = require('./src/api/routes/products');
 const passport = require("passport");
-const authenticationRoutes = require("./api/routes/authentication");
-const basketRoutes = require("./api/routes/basket");
+const authenticationRoutes = require("./src/api/routes/authentication");
+const basketRoutes = require("./src/api/routes/basket");
 const PORT = process.env.PORT || 8081;
 
 // Connecting to mongoose.
 // TODO : when deploying to a website change the url
 
-const URI = 'mongodb://localhost:37017/shop';
-console.log(process.env.MONGODB_URI);
-mongoose.connect(process.env.MONGODB_URI || URI, { useFindAndModify: false, useUnifiedTopology: true, useNewUrlParser: true}).then(() => {
+mongoose.connect(process.env.ATLAS_URI, { useFindAndModify: false, useUnifiedTopology: true, useNewUrlParser: true}).then(() => {
     console.log("Successfully connected to MongoDB");
 })
 .catch(err=> console.log(err.reason));
@@ -29,7 +27,7 @@ app.use(bodyParser.json());
 
 
 app.use(cors({
-    origin: "http://store-design.herokuapp.com",
+    origin: "http://localhost:3000",
     methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
     allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json',
     credentials: true,
